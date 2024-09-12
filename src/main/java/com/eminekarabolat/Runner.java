@@ -1,7 +1,9 @@
 package com.eminekarabolat;
 
+import com.eminekarabolat.utility.DatabaseSchema;
+
 public class Runner {
 	public static void main(String[] args) {
-		System.out.println("Hello world!");
+		DatabaseSchema.createTables();
 	}
 }

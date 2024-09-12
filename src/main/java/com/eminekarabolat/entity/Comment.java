@@ -19,7 +19,7 @@ public class Comment extends BaseEntity{
 		this.videoId = videoId;
 	}
 	
-	public Comment(Integer state, Long createat, Long updateat, Long id, Long userId, Long videoId) {
+	public Comment(Long id, Long userId, Long videoId,Integer state, Long createat, Long updateat) {
 		super(state, createat, updateat);
 		this.id = id;
 		this.userId = userId;

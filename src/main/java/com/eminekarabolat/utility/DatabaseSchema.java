@@ -25,8 +25,8 @@ public class DatabaseSchema {
                 "username VARCHAR(30) UNIQUE , " +
                 "password VARCHAR(16)  , " +
                 "state INTEGER NOT NULL DEFAULT 1 , " +
-                "createat BIGINT DEFAULT EXTRACT(epoch FROM now(), "+
-                "updateat BIGINT DEFAULT EXTRACT(epoch FROM now() "+
+                "createat BIGINT DEFAULT EXTRACT(epoch FROM now()), "+
+                "updateat BIGINT DEFAULT EXTRACT(epoch FROM now()) "+
                 
                 ");";
         
@@ -39,8 +39,8 @@ public class DatabaseSchema {
                 "description VARCHAR(255) , " +
                 "uploadDate Date , " +
                 "state INTEGER NOT NULL DEFAULT 1 , " +
-                "createat BIGINT DEFAULT EXTRACT(epoch FROM now(), "+
-                "updateat BIGINT DEFAULT EXTRACT(epoch FROM now() "+
+                "createat BIGINT DEFAULT EXTRACT(epoch FROM now()), "+
+                "updateat BIGINT DEFAULT EXTRACT(epoch FROM now()) "+
                 ");";
         
         
@@ -50,8 +50,8 @@ public class DatabaseSchema {
                 "userId BIGINT NOT NULL REFERENCES tbl_user(id), " +
                 "videoId BIGINT NOT NULL REFERENCES tbl_video(id), " +
                 "state INTEGER NOT NULL DEFAULT 1 , " +
-                "createat BIGINT DEFAULT EXTRACT(epoch FROM now(), "+
-                "updateat BIGINT DEFAULT EXTRACT(epoch FROM now() "+
+                "createat BIGINT DEFAULT EXTRACT(epoch FROM now()), "+
+                "updateat BIGINT DEFAULT EXTRACT(epoch FROM now()) "+
                 ");";
         
         
@@ -61,8 +61,8 @@ public class DatabaseSchema {
                 "userId BIGINT NOT NULL REFERENCES tbl_user(id), " +
                 "videoId BIGINT NOT NULL REFERENCES tbl_video(id), " +
                 "state INTEGER NOT NULL DEFAULT 1 , " +
-                "createat BIGINT DEFAULT EXTRACT(epoch FROM now(), "+
-                "updateat BIGINT DEFAULT EXTRACT(epoch FROM now() "+
+                "createat BIGINT DEFAULT EXTRACT(epoch FROM now()), "+
+                "updateat BIGINT DEFAULT EXTRACT(epoch FROM now()) "+
                 ");";
         
         
