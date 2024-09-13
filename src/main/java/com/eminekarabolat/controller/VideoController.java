@@ -2,6 +2,7 @@ package com.eminekarabolat.controller;
 
 import com.eminekarabolat.dto.request.UserSaveRequestDto;
 import com.eminekarabolat.dto.request.VideoSaveRequestDto;
+import com.eminekarabolat.dto.request.VideoUpdateRequestDto;
 import com.eminekarabolat.dto.response.UserResponseDto;
 import com.eminekarabolat.dto.response.VideoResponseDto;
 import com.eminekarabolat.entity.Video;
@@ -20,22 +21,25 @@ public class VideoController {
 	
 	public Optional<VideoResponseDto> save(VideoSaveRequestDto dto) {
 		try {
-			videoService.save(dto);
+			
 			System.out.println("Controller Video başarıyla kaydedildi.");
+			return  videoService.save(dto);
+			
 		} catch (Exception e) {
 			System.out.println("Controller Video kaydedilirken hata oluştu: " + e.getMessage());
 		}
 		return Optional.empty();
 	}
 	
-	public Optional<Video> update(Video video) {
+	public Optional<VideoResponseDto> update(VideoUpdateRequestDto dto) {
 		try {
-			videoService.update(video);
 			System.out.println("Controller Video başarıyla güncellendi.");
+			return videoService.update(dto);
+			
 		} catch (Exception e) {
 			System.out.println("Controller Video güncellenirken hata oluştu: " + e.getMessage());
 		}
-		return Optional.ofNullable(video);
+		return Optional.empty();
 	}
 	
 	public void delete(Long id) {
@@ -47,8 +51,8 @@ public class VideoController {
 		}
 	}
 	
-	public List<Video> findAll() {
-		List<Video> videoList = videoService.findAll();
+	public List<VideoResponseDto> findAll() {
+		List<VideoResponseDto> videoList = videoService.findAll();
 		if (videoList.isEmpty()) {
 			System.out.println("Controller Veritabanında kayıtlı Video bulunmamaktadır.");
 		}

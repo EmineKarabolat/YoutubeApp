@@ -1,6 +1,7 @@
 package com.eminekarabolat.controller;
 
 import com.eminekarabolat.dto.request.UserSaveRequestDto;
+import com.eminekarabolat.dto.request.UserUpdateRequestDto;
 import com.eminekarabolat.dto.response.UserResponseDto;
 import com.eminekarabolat.entity.User;
 import com.eminekarabolat.service.UserService;
@@ -18,18 +19,20 @@ public class UserController {
 	
 	public Optional<UserResponseDto> save(UserSaveRequestDto dto) {
 		try {
-			userService.save(dto);
+			
 			System.out.println("Controller User başarıyla kaydedildi.");
+			return userService.save(dto);
+		
 		} catch (Exception e) {
 			System.out.println("Controller User kaydedilirken hata oluştu: " + e.getMessage());
 		}
 		return Optional.empty();
 	}
 	
-	public Optional<UserResponseDto> update(UserSaveRequestDto dto) {
+	public Optional<UserResponseDto> update(UserUpdateRequestDto dto) {
 		try {
-			userService.update(dto);
 			System.out.println("Controller User başarıyla güncellendi.");
+			return userService.update(dto);
 		} catch (Exception e) {
 			System.out.println("Controller User güncellenirken hata oluştu: " + e.getMessage());
 		}
@@ -45,8 +48,8 @@ public class UserController {
 		}
 	}
 	
-	public List<User> findAll() {
-		List<User> userList = userService.findAll();
+	public List<UserResponseDto> findAll() {
+		List<UserResponseDto> userList = userService.findAll();
 		if (userList.isEmpty()) {
 			System.out.println("Controller Veritabanında kayıtlı User bulunmamaktadır.");
 		}
