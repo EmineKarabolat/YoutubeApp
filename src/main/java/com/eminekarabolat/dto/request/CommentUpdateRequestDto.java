@@ -1,13 +1,13 @@
 package com.eminekarabolat.dto.request;
 
-public class LikeUpdateRequestDto {
-
+public class CommentUpdateRequestDto {
+	
 	private Long likeid;
 	private Long userid;
 	private Long videoid;
 	private int status;
 	
-	public LikeUpdateRequestDto(Long likeid, Long userid, Long videoid, int status) {
+	public CommentUpdateRequestDto(Long likeid, Long userid, Long videoid, int status) {
 		this.likeid = likeid;
 		this.userid = userid;
 		this.videoid = videoid;

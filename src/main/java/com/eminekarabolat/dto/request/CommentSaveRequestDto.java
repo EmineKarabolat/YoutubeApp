@@ -1,10 +1,10 @@
 package com.eminekarabolat.dto.request;
 
-public class LikeSaveRequestDto {
+public class CommentSaveRequestDto {
 	private String username;
 	private String videotitle;
 	
-	public LikeSaveRequestDto(String username, String videotitle) {
+	public CommentSaveRequestDto(String username, String videotitle) {
 		this.username = username;
 		this.videotitle = videotitle;
 	}

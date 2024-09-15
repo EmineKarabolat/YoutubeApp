@@ -52,33 +52,37 @@ public class VideoService {
 		
 		return Optional.ofNullable(responseDto);
 	}
+	
 	public Optional<VideoResponseDto> update(VideoUpdateRequestDto dto) {
 		VideoResponseDto responseDto = new VideoResponseDto();
+		Optional<Video> byId = videoRepository.findById(dto.getVideoId());
 		try {
-			Optional<Video> byTitle = videoRepository.findByTitle(dto.getTitle());
-			if (byTitle.isPresent()) {
-				
-				Video video = byTitle.get();
+			
+			if (byId.isPresent()) {
+				Video video = byId.get();
 				video.setTitle(dto.getTitle());
 				video.setDescription(dto.getDescription());
 				
-				Optional<Video>  updateVideo = videoRepository.save(video);
+				Optional<Video> updateVideo = videoRepository.update(video);
 				
-				responseDto.setTitle(updateVideo.get().getTitle());
-				responseDto.setDescription(updateVideo.get().getDescription());
-				
-				
-				System.out.println(updateVideo.get().getTitle() + " başarıyla güncellendi.");
-				return Optional.of(responseDto);
-			}
-			else {
-				System.out.println("Service Güncellenmek istenen User bulunamadı.");
-			}
-		}catch (Exception e) {
-			System.out.println("Service User güncellenirken hata oluştu: " + e.getMessage());
+					responseDto.setTitle(updateVideo.get().getTitle());
+					responseDto.setDescription(updateVideo.get().getDescription());
+					
+					System.out.println(updateVideo.get().getTitle() + " başarıyla güncellendi.");
+					
+					
+				}
+				else {
+					System.out.println("Service Güncellenmek istenen Video bulunamadı.");
+					return Optional.empty();
+				}
 			
 		}
-		return Optional.empty();
+		catch (Exception e) {
+			System.out.println("Service Video güncellenirken hata oluştu: " + e.getMessage());
+			
+		}
+		return Optional.of(responseDto);
 	}
 	
 	

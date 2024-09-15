@@ -1,5 +1,8 @@
 package com.eminekarabolat.controller;
 
+import com.eminekarabolat.dto.request.CommentSaveRequestDto;
+import com.eminekarabolat.dto.request.CommentUpdateRequestDto;
+import com.eminekarabolat.dto.response.CommentResponseDto;
 import com.eminekarabolat.entity.Comment;
 import com.eminekarabolat.service.CommentService;
 
@@ -8,31 +11,31 @@ import java.util.Optional;
 
 public class CommentController {
 	private final CommentService commentService;
-	
+
 	public CommentController() {
 		this.commentService = new CommentService();
 	}
-	
-	public Optional<Comment> save(Comment comment) {
+
+	public Optional<CommentResponseDto> save(CommentSaveRequestDto dto) {
 		try {
-			commentService.save(comment);
+			commentService.save(dto);
 			System.out.println("Controller Comment başarıyla kaydedildi.");
 		} catch (Exception e) {
 			System.out.println("Controller Comment kaydedilirken hata oluştu: " + e.getMessage());
 		}
-		return Optional.ofNullable(comment);
+		return Optional.empty();
 	}
-	
-	public Optional<Comment> update(Comment comment) {
+
+	public Optional<CommentResponseDto> update(CommentUpdateRequestDto dto) {
 		try {
-			commentService.update(comment);
+			commentService.update(dto);
 			System.out.println("Controller Comment başarıyla güncellendi.");
 		} catch (Exception e) {
 			System.out.println("Controller Comment güncellenirken hata oluştu: " + e.getMessage());
 		}
-		return Optional.ofNullable(comment);
+		return Optional.empty();
 	}
-	
+
 	public void delete(Long id) {
 		try {
 			commentService.delete(id);
@@ -41,7 +44,7 @@ public class CommentController {
 			System.out.println("Controller Comment silinirken hata oluştu: " + e.getMessage());
 		}
 	}
-	
+
 	public List<Comment> findAll() {
 		List<Comment> commentList = commentService.findAll();
 		if (commentList.isEmpty()) {
@@ -49,7 +52,7 @@ public class CommentController {
 		}
 		return commentList;
 	}
-	
+
 	public Optional<Comment> findById(Long id) {
 		Optional<Comment> commentOptional = commentService.findById(id);
 		commentOptional.ifPresentOrElse(

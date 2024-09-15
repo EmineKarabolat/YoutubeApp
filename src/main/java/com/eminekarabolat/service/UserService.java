@@ -48,16 +48,17 @@ public class UserService {
 	
 	public Optional<UserResponseDto> update(UserUpdateRequestDto dto) {
 		UserResponseDto responseDto = new UserResponseDto();//kullanıcıya dönecek olan cevap
+		Optional<User> savedUser = userRepository.findById(dto.getUserId());
 		
 			try {
-				Optional<User> savedUser = userRepository.findByUsername(dto.getUsername());
+				
 				if (savedUser.isPresent()) {
 					User user = savedUser.get();
 					user.setEmail(dto.getEmail());
 					user.setUsername(dto.getUsername());
 					user.setPassword(dto.getPassword());
-					
-					Optional<User> updatedUser = userRepository.save(user);
+				
+					Optional<User> updatedUser = userRepository.update(user);
 					
 					responseDto.setName(updatedUser.get().getName());
 					responseDto.setSurname(updatedUser.get().getSurname());

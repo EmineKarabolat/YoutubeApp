@@ -21,12 +21,14 @@ public class VideoRepository implements ICrud<Video> {
 	}
 	@Override
 	public Optional<Video> save(Video video) {
-		sql = "INSERT INTO tbl_video(user_id,title,description) VALUES (?,?,?,?,)";
+		sql = "INSERT INTO tbl_video(userid,title,description) VALUES (?,?,?)";
 		try {
 			PreparedStatement preparedStatement = connectionProvider.getPreparedStatement(sql);
 			preparedStatement.setLong(1, video.getUserId());
 			preparedStatement.setString(2, video.getTitle());
 			preparedStatement.setString(3, video.getDescription());
+			
+			
 			preparedStatement.executeUpdate();
 			
 		}
@@ -38,16 +40,16 @@ public class VideoRepository implements ICrud<Video> {
 	}
 	
 	@Override
-	public Optional<Video> update(Video video) {
+	public Optional<Video> update (Video video) {
 		
-		sql="UPTADE tbl_video SET title=?,description=?  WHERE id=?";
+		sql = "UPDATE tbl_video SET title = ?, description = ?  WHERE id = ?";
 		try {
 			PreparedStatement preparedStatement = connectionProvider.getPreparedStatement(sql);
 			preparedStatement.setString(1,video.getTitle());
 			preparedStatement.setString(2, video.getDescription());
 			preparedStatement.setLong(3, video.getId());
 			int updatedRows = preparedStatement.executeUpdate();
-			if (updatedRows ==0) {
+			if (updatedRows == 0) {
 				System.err.println("Repository: Video güncellenirken hata oluştu. Güncelleme Başarırız");
 			}
 			
@@ -110,19 +112,18 @@ public class VideoRepository implements ICrud<Video> {
 	
 	private Video getValueFromResultSet(ResultSet rs) throws SQLException {
 		Long id = rs.getLong("id");
-		Long userId = rs.getLong("user_id");
+		Long userId = rs.getLong("userid");
 		String title = rs.getString("title");
 		String description = rs.getString("description");
-		String uploadDate  = rs.getString("uploadDate");
 		Integer state = rs.getInt("state");
 		Long createat = rs.getLong("createat");
 		Long updateat= rs.getLong("updateat");
 		
-		return new Video(id, userId,title,description,LocalDateTime.parse(uploadDate), state, createat, updateat);
+		return new Video(id, userId,title,description, state, createat, updateat);
 	}
 	
 	public Optional<Video> findByTitle(String videoTitle) {
-		sql = "SELECT * FROM tbl_video WHERE isim = ?";
+		sql = "SELECT * FROM tbl_video WHERE title = ?";
 		try (PreparedStatement preparedStatement = connectionProvider.getPreparedStatement(sql)) {
 			preparedStatement.setString(1, videoTitle);
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -134,5 +135,24 @@ public class VideoRepository implements ICrud<Video> {
 			throw new RuntimeException(e);
 		}
 		return Optional.empty();
+	}
+	public List<Video> findByUserId(Long userId) {
+		sql = "SELECT * FROM tbl_video WHERE userid = ?";
+		List<Video> videoList = new ArrayList<>();
+		
+		try (PreparedStatement preparedStatement = connectionProvider.getPreparedStatement(sql)) {
+			preparedStatement.setLong(1, userId); // Kullanıcı ID'sini sorguya ekle
+			
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				while (resultSet.next()) {
+					videoList.add(getValueFromResultSet(resultSet)); // Sonuç kümesindeki her kaydı listeye ekle
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println("Kullanıcıya ait postlar getirilirken bir hata oluştu... " + e.getMessage());
+			throw new RuntimeException(e); // Hata durumunda exception fırlatıyoruz
+		}
+		
+		return videoList;
 	}
 }

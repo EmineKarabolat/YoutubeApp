@@ -39,7 +39,7 @@ public class UserRepository implements ICrud<User> {
 	
 	@Override
 	public Optional<User> update(User user) {
-		sql="UPTADE tbl_user SET name=?,surname=?,email=?,username=?,password=? WHERE id=?";
+		sql="UPDATE tbl_user SET name=?,surname=?,email=?,username=?,password=? WHERE id=?";
 		try {
 			PreparedStatement preparedStatement = connectionProvider.getPreparedStatement(sql);
 			preparedStatement.setString(1, user.getName());
@@ -140,4 +140,41 @@ public class UserRepository implements ICrud<User> {
 		}
 		return Optional.empty();
 	}
+	
+	public boolean existsByUserName(String username) {
+		String sql = "SELECT * FROM tbl_user WHERE username = ?";
+		
+		try (PreparedStatement preparedStatement = connectionProvider.getPreparedStatement(sql)) {
+			preparedStatement.setString(1, username);
+			
+			
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				return resultSet.next();
+			}
+		} catch (SQLException e) {
+			System.out.println("Username kontrolü sırasında hata oluştu: " + e.getMessage());
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public Optional<User> doLogin(String username, String password) {
+		String sql = "SELECT * FROM tbl_user WHERE username = ? AND password = ?";
+		
+		try (PreparedStatement preparedStatement = connectionProvider.getPreparedStatement(sql)) {
+			preparedStatement.setString(1, username);
+			preparedStatement.setString(2, password);
+			
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (resultSet.next()) {
+					
+					return Optional.of(getValueFromResultSet(resultSet));
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println("Login sırasında hata oluştu: " + e.getMessage());
+			throw new RuntimeException(e);
+		}
+		return Optional.empty();
+	}
+	
 }

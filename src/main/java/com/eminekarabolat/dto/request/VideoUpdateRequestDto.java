@@ -1,22 +1,22 @@
 package com.eminekarabolat.dto.request;
 
 public class VideoUpdateRequestDto {
-	private Long username;
+	private Long videoId;
 	private String title;
 	private String description;
 	
-	public VideoUpdateRequestDto(Long username, String title, String description) {
-		this.username = username;
+	public VideoUpdateRequestDto(Long videoId, String title, String description) {
+		this.videoId = videoId;
 		this.title = title;
 		this.description = description;
 	}
 	
-	public Long getUsername() {
-		return username;
+	public Long getVideoId() {
+		return videoId;
 	}
 	
-	public void setUsername(Long username) {
-		this.username = username;
+	public void setVideoId(Long videoId) {
+		this.videoId = videoId;
 	}
 	
 	public String getTitle() {

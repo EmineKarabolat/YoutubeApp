@@ -21,7 +21,7 @@ public class CommentRepository implements ICrud<Comment> {
 	
 	@Override
 	public Optional<Comment> save(Comment comment) {
-		sql = "INSERT INTO tbl_comment(user_id, video_id) VALUES(?, ?)";
+		sql = "INSERT INTO tbl_comment (userid, videoid) VALUES(?, ?)";
 		try (PreparedStatement preparedStatement = connectionProvider.getPreparedStatement(sql);
 		) {
 			preparedStatement.setLong(1, comment.getUserId());
@@ -35,11 +35,12 @@ public class CommentRepository implements ICrud<Comment> {
 	
 	@Override
 	public Optional<Comment> update(Comment comment) {
-		sql = "UPDATE tbl_comment SET user_id = ?, video_id = ? WHERE id = ?";
+		sql = "UPDATE tbl_comment SET userid = ?, videoid = ?, status=? WHERE id = ?";
 		try (PreparedStatement preparedStatement = connectionProvider.getPreparedStatement(sql)) {
 			preparedStatement.setLong(1, comment.getUserId());
 			preparedStatement.setLong(2, comment.getVideoId());
-			preparedStatement.setLong(3, comment.getId());
+			preparedStatement.setInt(3, comment.getStatus());
+			preparedStatement.setLong(4, comment.getId());
 			int updatedRows = preparedStatement.executeUpdate();
 			if (updatedRows > 0) {
 				System.out.println("Güncelleme Başarılı!");
@@ -97,8 +98,8 @@ public class CommentRepository implements ICrud<Comment> {
 	
 	private Comment getValueFromResultSet(ResultSet resultSet) throws SQLException {
 		Long id = resultSet.getLong("id");
-		Long userId = resultSet.getLong("user_id");
-		Long videoId = resultSet.getLong("video_id");
+		Long userId = resultSet.getLong("userid");
+		Long videoId = resultSet.getLong("videoid");
 		Integer state = resultSet.getInt("state");
 		Long createat = resultSet.getLong("createat");
 		Long updateat= resultSet.getLong("updateat");

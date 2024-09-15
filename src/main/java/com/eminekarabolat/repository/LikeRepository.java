@@ -24,7 +24,7 @@ public class LikeRepository implements ICrud<Like> {
 	
 	@Override
 	public Optional<Like> save(Like like) {
-		sql = "INSERT INTO tbl_like (user_id,video_id) VALUES (?,?)";
+		sql = "INSERT INTO tbl_like (userid,videoid) VALUES (?,?)";
 		try {
 			PreparedStatement preparedStatement = connectionProvider.getPreparedStatement(sql);
 			preparedStatement.setLong(1, like.getUserId());
@@ -39,12 +39,14 @@ public class LikeRepository implements ICrud<Like> {
 	
 	@Override
 	public Optional<Like> update(Like like) {
-		sql = "UPTADE tbl_like SET user_id=?, video_id=?  WHERE id=?";
+		sql = "UPDATE tbl_like SET userid=?, videoid=?, status = ? WHERE id=?";
 		try {
 			PreparedStatement preparedStatement = connectionProvider.getPreparedStatement(sql);
 			preparedStatement.setLong(1, like.getUserId());
 			preparedStatement.setLong(2, like.getVideoId());
-			preparedStatement.setLong(3, like.getId());
+			preparedStatement.setInt(3,like.getStatus());
+			preparedStatement.setLong(4, like.getId());
+		
 			int updatedRows = preparedStatement.executeUpdate();
 			if (updatedRows == 0) {
 				System.err.println("Repository: Like güncellenirken hata oluştu. Güncelleme Başarırız");
@@ -112,8 +114,8 @@ public class LikeRepository implements ICrud<Like> {
 	
 	private Like getValueFromResultSet(ResultSet rs) throws SQLException {
 		Long id = rs.getLong("id");
-		Long userId = rs.getLong("user_id");
-		Long videoId = rs.getLong("video_id");
+		Long userId = rs.getLong("userid");
+		Long videoId = rs.getLong("videoid");
 		Integer state = rs.getInt("state");
 		Long createat = rs.getLong("createat");
 		Long updateat = rs.getLong("updateat");
@@ -134,6 +136,21 @@ public class LikeRepository implements ICrud<Like> {
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
+		}
+		return Optional.empty();
+	}
+	
+	public Optional<String> findVideoTitleByVideoId(String videotitle) {
+		sql = "SELECT title FROM tbl_video WHERE id = ?";
+		try (PreparedStatement preparedStatement = connectionProvider.getPreparedStatement(sql)) {
+			preparedStatement.setString(1, videotitle);
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (resultSet.next()) {
+					return Optional.of(resultSet.getString("title"));
+				}
+			}
+		} catch (SQLException e) {
+			System.err.println("Repository: Video title bulunurken hata oluştu: " + e.getMessage());
 		}
 		return Optional.empty();
 	}

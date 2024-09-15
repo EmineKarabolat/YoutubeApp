@@ -4,6 +4,9 @@ public class Like extends BaseEntity{
 	private Long id;
 	private Long userId;
 	private Long videoId;
+	private int status;
+	
+	
 	
 	public Like() {
 	}
@@ -24,6 +27,13 @@ public class Like extends BaseEntity{
 		this.id = id;
 		this.userId = userId;
 		this.videoId = videoId;
+	}
+	
+	public Like(Long id, Long userId, Long videoId, int status) {
+		this.id = id;
+		this.userId = userId;
+		this.videoId = videoId;
+		this.status = status;
 	}
 	
 	public Long getId() {
@@ -50,8 +60,16 @@ public class Like extends BaseEntity{
 		this.videoId = videoId;
 	}
 	
+	public int getStatus() {
+		return status;
+	}
+	
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	
 	@Override
 	public String toString() {
-		return "Like{" + "id=" + getId() + ", userId=" + getUserId() + ", videoId=" + getVideoId() + ", state=" + getState() + ", createat=" + getCreateat() + ", updateat=" + getUpdateat() + '}';
+		return "Like{" + "id=" + getId() + ", userId=" + getUserId() + ", videoId=" + getVideoId() + ", status=" + getStatus() + ", state=" + getState() + ", createat=" + getCreateat() + ", updateat=" + getUpdateat() + '}';
 	}
 }
