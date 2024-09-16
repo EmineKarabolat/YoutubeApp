@@ -4,34 +4,38 @@ public class Comment extends BaseEntity{
 	private Long id;
 	private Long userId;
 	private Long videoId;
-	private int status;
+	private Integer status;
+	private String commentText;
+	
 	
 	public Comment() {
 	}
 	
-	public Comment(Long id, Long userId, Long videoId) {
-		this.id = id;
-		this.userId = userId;
-		this.videoId = videoId;
-	}
-	
-	public Comment(Long userId, Long videoId) {
-		this.userId = userId;
-		this.videoId = videoId;
-	}
-	
-	public Comment(Long id, Long userId, Long videoId,Integer state, Long createat, Long updateat) {
+	public Comment(Long id, Long userId, Long videoId, Integer status, String commentText, Integer state, Long createat,
+	               Long updateat ){
 		super(state, createat, updateat);
 		this.id = id;
 		this.userId = userId;
 		this.videoId = videoId;
+		this.status = status;
+		this.commentText = commentText;
 	}
 	
-	public Comment(Long id, Long userId, Long videoId, int status) {
+	public Comment(Integer state, Long createat, Long updateat, Long userId, Long videoId, Integer status, String commentText) {
+		super(state, createat, updateat);
+		this.userId = userId;
+		this.videoId = videoId;
+		this.status = status;
+		this.commentText = commentText;
+	}
+	
+	public Comment(Integer state, Long createat, Long updateat, Long id, Long userId, Long videoId, Integer status, String commentText) {
+		super(state, createat, updateat);
 		this.id = id;
 		this.userId = userId;
 		this.videoId = videoId;
 		this.status = status;
+		this.commentText = commentText;
 	}
 	
 	public Long getId() {
@@ -58,16 +62,24 @@ public class Comment extends BaseEntity{
 		this.videoId = videoId;
 	}
 	
-	public int getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 	
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	
+	public String getCommentText() {
+		return commentText;
+	}
+	
+	public void setCommentText(String commentText) {
+		this.commentText = commentText;
 	}
 	
 	@Override
 	public String toString() {
-		return "Comment{" + "id=" + getId() + ", userId=" + getUserId() + ", videoId=" + getVideoId() + ", status=" + status + ", state=" + getState() + ", createat=" + getCreateat() + ", updateat=" + getUpdateat() + '}';
+		return "Comment{" + "id=" + getId() + ", userId=" + getUserId() + ", videoId=" + getVideoId() + ", status=" + getStatus() + ", commentText='" + getCommentText() + '\'' + ", state=" + getState() + ", createat=" + getCreateat() + ", updateat=" + getUpdateat() + '}';
 	}
 }

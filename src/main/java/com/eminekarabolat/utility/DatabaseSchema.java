@@ -60,7 +60,8 @@ public class DatabaseSchema {
                 "id BIGSERIAL PRIMARY KEY, " + // PostgreSQL'de BIGSERIAL kullanılır
                 "userId BIGINT NOT NULL REFERENCES tbl_user(id), " +
                 "videoId BIGINT NOT NULL REFERENCES tbl_video(id), " +
-                "status INTEGER NOT NULL DEFAULT 0, " +
+                "status INTEGER NOT NULL DEFAULT 1, " +
+                "commentText TEXT , " +
                 "state INTEGER NOT NULL DEFAULT 1 , " +
                 "createat BIGINT DEFAULT EXTRACT(epoch FROM now()), "+
                 "updateat BIGINT DEFAULT EXTRACT(epoch FROM now()) "+

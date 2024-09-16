@@ -3,7 +3,7 @@ package com.eminekarabolat.dto.response;
 public class CommentResponseDto {
 	private  String  username;
 	private  String  videotitle;
-	
+	private  String  commentText;
 	public String getUsername() {
 		return username;
 	}
@@ -20,8 +20,16 @@ public class CommentResponseDto {
 		this.videotitle = videotitle;
 	}
 	
+	public String getCommentText() {
+		return commentText;
+	}
+	
+	public void setCommentText(String commentText) {
+		this.commentText = commentText;
+	}
+	
 	@Override
 	public String toString() {
-		return "LikeResponse{" + "username='" + getUsername() + '\'' + ", videotitle='" + getVideotitle() + '\'' + '}';
+		return "CommentResponseDto{" + "username='" + getUsername() + '\'' + ", videotitle='" + getVideotitle() + '\'' + ", commentText='" + getCommentText() + '\'' + '}';
 	}
 }

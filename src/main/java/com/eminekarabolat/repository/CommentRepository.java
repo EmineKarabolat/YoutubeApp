@@ -21,11 +21,12 @@ public class CommentRepository implements ICrud<Comment> {
 	
 	@Override
 	public Optional<Comment> save(Comment comment) {
-		sql = "INSERT INTO tbl_comment (userid, videoid) VALUES(?, ?)";
+		sql = "INSERT INTO tbl_comment (userid, videoid,commenttext) VALUES(?, ?,?)";
 		try (PreparedStatement preparedStatement = connectionProvider.getPreparedStatement(sql);
 		) {
 			preparedStatement.setLong(1, comment.getUserId());
 			preparedStatement.setLong(2, comment.getVideoId());
+			preparedStatement.setString(3, comment.getCommentText());
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -35,22 +36,17 @@ public class CommentRepository implements ICrud<Comment> {
 	
 	@Override
 	public Optional<Comment> update(Comment comment) {
-		sql = "UPDATE tbl_comment SET userid = ?, videoid = ?, status=? WHERE id = ?";
+		String sql = "UPDATE tbl_comment SET commentText = ?, status = ? WHERE id = ?";
 		try (PreparedStatement preparedStatement = connectionProvider.getPreparedStatement(sql)) {
-			preparedStatement.setLong(1, comment.getUserId());
-			preparedStatement.setLong(2, comment.getVideoId());
-			preparedStatement.setInt(3, comment.getStatus());
-			preparedStatement.setLong(4, comment.getId());
-			int updatedRows = preparedStatement.executeUpdate();
-			if (updatedRows > 0) {
-				System.out.println("Güncelleme Başarılı!");
-			} else {
-				System.out.println("Güncelleme Başarısız!");
-			}
+			preparedStatement.setString(1, comment.getCommentText());
+			preparedStatement.setInt(2, comment.getStatus());
+			preparedStatement.setLong(3, comment.getId());
+			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
+			System.out.println("Yorum güncellenirken bir hata oluştu: " + e.getMessage());
 		}
-		return Optional.of(comment);
+		return Optional.ofNullable(comment);
 	}
 	
 	@Override
@@ -100,10 +96,28 @@ public class CommentRepository implements ICrud<Comment> {
 		Long id = resultSet.getLong("id");
 		Long userId = resultSet.getLong("userid");
 		Long videoId = resultSet.getLong("videoid");
+		Integer status = resultSet.getInt("status");
+		String commentText = resultSet.getString("commenttext");
 		Integer state = resultSet.getInt("state");
 		Long createat = resultSet.getLong("createat");
 		Long updateat= resultSet.getLong("updateat");
 		
-		return new Comment(id, userId, videoId, state, createat, updateat);
+		return new Comment(id, userId, videoId,status,commentText ,state, createat, updateat);
+	}
+	
+	public List<Comment> findByVideoId(Long videoId) {
+		List<Comment> comments = new ArrayList<>();
+		String sql = "SELECT * FROM tbl_comment WHERE videoid = ?";
+		try (PreparedStatement preparedStatement = connectionProvider.getPreparedStatement(sql)) {
+			preparedStatement.setLong(1, videoId);
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				while (resultSet.next()) {
+					comments.add(getValueFromResultSet(resultSet));
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println("Yorumlar alınırken hata oluştu: " + e.getMessage());
+		}
+		return comments;
 	}
 }

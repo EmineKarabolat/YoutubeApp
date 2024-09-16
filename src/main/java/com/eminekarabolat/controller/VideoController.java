@@ -5,18 +5,24 @@ import com.eminekarabolat.dto.request.VideoSaveRequestDto;
 import com.eminekarabolat.dto.request.VideoUpdateRequestDto;
 import com.eminekarabolat.dto.response.UserResponseDto;
 import com.eminekarabolat.dto.response.VideoResponseDto;
+import com.eminekarabolat.entity.User;
 import com.eminekarabolat.entity.Video;
+import com.eminekarabolat.gui.UserGui;
+import com.eminekarabolat.repository.VideoRepository;
 import com.eminekarabolat.service.VideoService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 
 public class VideoController {
-	
+	static Scanner scanner = new Scanner(System.in);
+	private final VideoRepository videoRepository;
 	private final VideoService videoService;
 	
 	public VideoController() {
 		this.videoService = new VideoService();
+		this.videoRepository = new VideoRepository();
 	}
 	
 	public Optional<VideoResponseDto> save(VideoSaveRequestDto dto) {
@@ -66,5 +72,76 @@ public class VideoController {
 				() -> System.out.println("Controller Böyle bir takım bulunamadı.")
 		);
 		return videoOptional;
+	}
+	
+	public void viewAllVideos() {
+		List<Video> videos = videoRepository.findAll();
+		
+		if (videos.isEmpty()) {
+			System.out.println("Hiç video bulunmamaktadır.");
+		}
+		else {
+			for (Video video : videos) {
+				System.out.println("Kullanıcı: " + video.getUserId());
+				System.out.println("Başlık: " + video.getTitle());
+				System.out.println("İçerik: " + video.getDescription());
+				System.out.println("-----------------------");
+			}
+		}
+	}
+	
+	public void shareVideo() {
+		if (UserGui.girisYapanKullanici == null) {
+			System.out.println("Video paylaşmak için giriş yapmanız gereklidir.");
+			return;
+		}
+		
+		System.out.print("Title: ");
+		String title = scanner.nextLine();
+		
+		System.out.print("Description: ");
+		String description = scanner.nextLine();
+		
+		Video video = new Video(UserGui.girisYapanKullanici.getId(), title, description);
+		videoRepository.save(video);
+		
+		System.out.println("Video başarıyla paylaşıldı");
+	}
+	
+	public void viewYourAllVideos() {
+		if (UserGui.girisYapanKullanici == null) {
+			System.out.println("Kendi videolarınızı görüntülemek için giriş yapmanız gerekiyor.");
+			return;
+		}
+		
+		List<Video> userVideos = videoRepository.findByUserId(UserGui.girisYapanKullanici.getId());
+		
+		if (userVideos.isEmpty()) {
+			System.out.println("Hiç video paylaşmadınız.");
+		}
+		else {
+			for (Video video : userVideos) {
+				System.out.println("Başlık: " + video.getTitle());
+				System.out.println("İçerik: " + video.getDescription());
+				
+				System.out.println("-----------------------");
+			}
+		}
+		
+	}
+	
+	private void kullanicilariListele() {
+		List<User> users = new UserController().getAllUsers(); // Bu metodu UserController'dan implement edin
+		
+		if (users.isEmpty()) {
+			System.out.println("Hiç kullanıcı bulunmuyor.");
+		}
+		else {
+			System.out.println("Kullanıcı Listesi:");
+			for (User user : users) {
+				System.out.println("Username: " + user.getUsername());
+			}
+		}
+		
 	}
 }

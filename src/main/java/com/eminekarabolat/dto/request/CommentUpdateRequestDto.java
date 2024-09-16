@@ -1,25 +1,19 @@
 package com.eminekarabolat.dto.request;
 
 public class CommentUpdateRequestDto {
-	
-	private Long likeid;
+	private Long id;
 	private Long userid;
 	private Long videoid;
-	private int status;
+	private Integer status;
+	private String commentText;
 	
-	public CommentUpdateRequestDto(Long likeid, Long userid, Long videoid, int status) {
-		this.likeid = likeid;
+	
+	public CommentUpdateRequestDto(Long id, Long userid, Long videoid, Integer status, String commentText) {
+		this.id = id;
 		this.userid = userid;
 		this.videoid = videoid;
 		this.status = status;
-	}
-	
-	public Long getLikeid() {
-		return likeid;
-	}
-	
-	public void setLikeid(Long likeid) {
-		this.likeid = likeid;
+		this.commentText = commentText;
 	}
 	
 	public Long getUserid() {
@@ -42,7 +36,23 @@ public class CommentUpdateRequestDto {
 		return status;
 	}
 	
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	
+	public String getCommentText() {
+		return commentText;
+	}
+	
+	public void setCommentText(String commentText) {
+		this.commentText = commentText;
+	}
+	
+	public Long getId() {
+		return id;
+	}
+	
+	public void setId(Long id) {
+		this.id = id;
 	}
 }

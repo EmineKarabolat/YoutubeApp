@@ -24,11 +24,12 @@ public class LikeRepository implements ICrud<Like> {
 	
 	@Override
 	public Optional<Like> save(Like like) {
-		sql = "INSERT INTO tbl_like (userid,videoid) VALUES (?,?)";
+		sql = "INSERT INTO tbl_like (userid,videoid,status) VALUES (?,?,?)";
 		try {
 			PreparedStatement preparedStatement = connectionProvider.getPreparedStatement(sql);
 			preparedStatement.setLong(1, like.getUserId());
 			preparedStatement.setLong(2, like.getVideoId());
+			preparedStatement.setInt(3, like.getStatus());
 			preparedStatement.executeUpdate();
 		}
 		catch (SQLException e) {
@@ -116,11 +117,12 @@ public class LikeRepository implements ICrud<Like> {
 		Long id = rs.getLong("id");
 		Long userId = rs.getLong("userid");
 		Long videoId = rs.getLong("videoid");
+		Integer status = rs.getInt("status");
 		Integer state = rs.getInt("state");
 		Long createat = rs.getLong("createat");
 		Long updateat = rs.getLong("updateat");
 		
-		return new Like(id, userId, videoId, state, createat, updateat);
+		return new Like(id, userId, videoId, status, state, createat, updateat);
 	}
 	
 	public Optional<Like> findByUsername(String username) {
@@ -154,4 +156,23 @@ public class LikeRepository implements ICrud<Like> {
 		}
 		return Optional.empty();
 	}
+	
+	public Optional<Like> findByVideoIdAndUserId(Long videoId, Long userId) {
+		String sql = "SELECT * FROM tbl_like WHERE videoid = ? AND userid = ?";
+		try (PreparedStatement preparedStatement = connectionProvider.getPreparedStatement(sql)) {
+			preparedStatement.setLong(1, videoId);
+			preparedStatement.setLong(2, userId);
+			
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (resultSet.next()) {
+					return Optional.of(getValueFromResultSet(resultSet));
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println("Like verilerini alırken hata oluştu: " + e.getMessage());
+		}
+		return Optional.empty();
+	}
+	
+
 }
