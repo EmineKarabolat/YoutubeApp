@@ -89,13 +89,10 @@ public class CommentController {
 		System.out.print("Düzenleyeceğiniz video başlığını girin: ");
 		String videoTitle = scanner.nextLine();
 		
-		System.out.print("Eski yorumu girin: ");
-		String oldCommentText = scanner.nextLine();
-		
 		System.out.print("Yeni yorumu girin: ");
 		String newCommentText = scanner.nextLine();
 		
-		Optional<CommentResponseDto> result = commentService.editComment(videoTitle, oldCommentText, newCommentText);
+		Optional<CommentResponseDto> result = commentService.editComment(videoTitle, newCommentText);
 		
 		if (result.isPresent()) {
 			CommentResponseDto commentResponse = result.get();
@@ -108,4 +105,7 @@ public class CommentController {
 		}
 	}
 	
+	public List<Comment> findByIdComment(Long videoId) {
+		return commentService.findByCommentVideoId(videoId);
+	}
 }

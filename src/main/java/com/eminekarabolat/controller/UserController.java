@@ -5,6 +5,7 @@ import com.eminekarabolat.dto.request.UserUpdateRequestDto;
 import com.eminekarabolat.dto.response.UserResponseDto;
 import com.eminekarabolat.entity.User;
 import com.eminekarabolat.gui.UserGui;
+import com.eminekarabolat.model.UserModel;
 import com.eminekarabolat.repository.UserRepository;
 import com.eminekarabolat.service.UserService;
 
@@ -16,12 +17,12 @@ public class UserController {
 	
 	private final UserRepository userRepository;
 	public static User girisYapanKullanici;
-	
 	private final UserService userService;
 	
 	public UserController() {
 		this.userRepository = new UserRepository();
 		this.userService = new UserService();
+		
 	}
 	
 	public Optional<UserResponseDto> save(UserSaveRequestDto dto) {
@@ -65,10 +66,6 @@ public class UserController {
 	
 	public Optional<User> findById(Long id) {
 		Optional<User> userOptional = userService.findById(id);
-		userOptional.ifPresentOrElse(
-				user -> System.out.println("Controller User bulundu: " + user.getSurname()),
-				() -> System.out.println("Controller Böyle bir User bulunamadı.")
-		);
 		return userOptional;
 	}
 	
@@ -121,11 +118,12 @@ public class UserController {
 		Optional<User> user = userRepository.doLogin(username, password);
 		
 		
-		// TODO UserGuiyi neden kullandık.
+	
 		if (user.isPresent()) {
 			UserGui.girisYapanKullanici=user.get(); //girisbasarılı ise kullanıcıyı sakladık
 			System.out.println("Giriş başarılı! Hoşgeldin, " + user.get().getName() +" "+ user.get().getSurname()+ "!");
-			//burada giriş yapan user'a her yerden erişebilmeli
+			UserModel userModel = new UserModel(user.get());
+			userModel.displayUserInfo();
 			
 		} else {
 			System.out.println("Giriş bilgileri hatalı!");
@@ -135,4 +133,6 @@ public class UserController {
 	public List<User> getAllUsers() {
 		return userRepository.findAll();
 	}
+	
+	
 }

@@ -174,11 +174,13 @@ public class CommentService {
 		// Yorum kaydet
 		commentRepository.save(newComment);
 		
+		videoService.incrementCommentCount(videoTitle);
 		
 		return "Yorum başarıyla eklendi.";
+		
 	}
 	
-	public Optional<CommentResponseDto> editComment(String videoTitle, String oldCommentText, String newCommentText) {
+	public Optional<CommentResponseDto> editComment(String videoTitle, String oldCommentText) {
 		Optional<Video> videoOpt = videoService.findByTitle(videoTitle);
 		
 		if (videoOpt.isPresent()) {
@@ -232,5 +234,9 @@ public class CommentService {
 			
 		}
 		return "Video başlığı ile eşleşen video bulunamadı.";
+	}
+	
+	public List<Comment> findByCommentVideoId(Long videoId) {
+		return commentRepository.findByVideoId(videoId);
 	}
 }

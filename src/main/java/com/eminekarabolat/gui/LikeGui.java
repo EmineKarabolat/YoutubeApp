@@ -44,6 +44,7 @@ public class LikeGui {
 				}
 				case 0:{
 					System.out.println("Çıkış yapılıyor...");
+					break;
 				}
 				default:
 					System.out.println("Geçersiz seçenek, lütfen tekrar deneyin.");

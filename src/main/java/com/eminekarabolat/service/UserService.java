@@ -114,8 +114,7 @@ public class UserService {
 	
 	public Optional<User> findById(Long id) {
 		Optional<User> user = userRepository.findById(id);
-		user.ifPresentOrElse(t -> System.out.println("Service User bulundu: " + t.getUsername()),
-		                          () -> System.out.println("Service Böyle bir username bulunamadı."));
+	
 		return user;
 	}
 	

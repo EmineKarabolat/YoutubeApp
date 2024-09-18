@@ -5,6 +5,7 @@ import com.eminekarabolat.dto.request.VideoUpdateRequestDto;
 import com.eminekarabolat.dto.response.VideoResponseDto;
 import com.eminekarabolat.entity.User;
 import com.eminekarabolat.entity.Video;
+import com.eminekarabolat.model.VideoModel;
 import com.eminekarabolat.repository.VideoRepository;
 
 import java.util.ArrayList;
@@ -131,4 +132,22 @@ public class VideoService {
 	public Optional<Video> findByTitle(String videoTitle) {
 		return videoRepository.findByTitle(videoTitle);
 	}
+	
+	public List<Video>viewAllVideos(){
+		return videoRepository.findAll();
+	}
+	public void incrementLikeCount(String videoTitle) {
+		videoRepository.incrementLikeCount(videoTitle);
+	}
+	
+	public void incrementCommentCount(String videoTitle){
+		videoRepository.incrementCommentCount(videoTitle);
+	}
+	
+	public void incrementDislikeCount(String videoTitle) {
+	videoRepository.incrementDislikeCount(videoTitle);
+	}
+	
+
+	
 }

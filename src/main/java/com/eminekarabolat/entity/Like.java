@@ -81,4 +81,5 @@ public class Like extends BaseEntity{
 	public String toString() {
 		return "Like{" + "id=" + getId() + ", userId=" + getUserId() + ", videoId=" + getVideoId() + ", status=" + getStatus() + ", state=" + getState() + ", createat=" + getCreateat() + ", updateat=" + getUpdateat() + '}';
 	}
+	
 }

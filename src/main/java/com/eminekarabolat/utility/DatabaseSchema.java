@@ -37,6 +37,10 @@ public class DatabaseSchema {
                 "userId BIGINT NOT NULL REFERENCES tbl_user(id), " +
                 "title VARCHAR(255) NOT NULL, " +
                 "description VARCHAR(255) , " +
+                "viewCount INTEGER DEFAULT 0 , " +
+                "likeCount INTEGER DEFAULT 0 , " +
+                "commentCount INTEGER DEFAULT 0 , " +
+                "dislikeCount INTEGER DEFAULT 0 , " +
                 "state INTEGER NOT NULL DEFAULT 1 , " +
                 "createat BIGINT DEFAULT EXTRACT(epoch FROM now()), "+
                 "updateat BIGINT DEFAULT EXTRACT(epoch FROM now()) "+

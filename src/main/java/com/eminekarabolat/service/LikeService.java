@@ -175,6 +175,7 @@ public class LikeService {
 				like.setStatus(1);
 			}
 			likeRepository.save(like);
+			videoService.incrementLikeCount(video.getTitle());
 			return "Video başlığına göre like atıldı.";
 			
 		}
@@ -196,6 +197,7 @@ public String dissLikeAt(String videoTitle) {
 			Like like = likeOpt.get();
 			like.setStatus(2);
 			likeRepository.update(like);
+			videoService.incrementDislikeCount(video.getTitle());
 			return "Video başlığına göre diss like atıldı.";
 		}
 		else {

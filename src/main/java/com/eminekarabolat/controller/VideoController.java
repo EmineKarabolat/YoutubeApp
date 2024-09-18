@@ -1,13 +1,14 @@
 package com.eminekarabolat.controller;
 
-import com.eminekarabolat.dto.request.UserSaveRequestDto;
+
 import com.eminekarabolat.dto.request.VideoSaveRequestDto;
 import com.eminekarabolat.dto.request.VideoUpdateRequestDto;
-import com.eminekarabolat.dto.response.UserResponseDto;
 import com.eminekarabolat.dto.response.VideoResponseDto;
 import com.eminekarabolat.entity.User;
 import com.eminekarabolat.entity.Video;
 import com.eminekarabolat.gui.UserGui;
+import com.eminekarabolat.model.UserModel;
+import com.eminekarabolat.model.VideoModel;
 import com.eminekarabolat.repository.VideoRepository;
 import com.eminekarabolat.service.VideoService;
 
@@ -19,10 +20,13 @@ public class VideoController {
 	static Scanner scanner = new Scanner(System.in);
 	private final VideoRepository videoRepository;
 	private final VideoService videoService;
+	private final UserController userController;
+	
 	
 	public VideoController() {
 		this.videoService = new VideoService();
 		this.videoRepository = new VideoRepository();
+		this.userController = new UserController();
 	}
 	
 	public Optional<VideoResponseDto> save(VideoSaveRequestDto dto) {
@@ -73,18 +77,35 @@ public class VideoController {
 		);
 		return videoOptional;
 	}
-	
-	public void viewAllVideos() {
-		List<Video> videos = videoRepository.findAll();
-		
-		if (videos.isEmpty()) {
-			System.out.println("Hiç video bulunmamaktadır.");
+	public void kullanicilariListele() {
+		List<User> users = new UserController().getAllUsers();
+		if (users.isEmpty()) {
+			System.out.println("Hiç kullanıcı bulunmuyor.");
+		} else {
+			System.out.println("Kullanıcı Listesi:");
+			for (User user : users) {
+				UserModel userModel=new UserModel(user);
+				userModel.displayUserInfo();
+			}
 		}
-		else {
-			for (Video video : videos) {
-				System.out.println("Kullanıcı: " + video.getUserId());
-				System.out.println("Başlık: " + video.getTitle());
-				System.out.println("İçerik: " + video.getDescription());
+	}
+	public void viewAllVideos() {
+		List<Video> videoList = videoRepository.findAll();
+		
+		if (videoList.isEmpty()) {
+			System.out.println("Hiç Video bulunmamaktadır.");
+		} else {
+			for (Video video : videoList) {
+				Optional<User> userOpt = userController.findById(video.getUserId());
+				if (userOpt.isPresent()) {
+					User user = userOpt.get();
+					
+					VideoModel videoModel = new VideoModel(user, video);
+					videoModel.displayVideo();
+					
+				} else {
+					System.out.println("Video kullanıcısı bulunamadı: " + video.getTitle());
+				}
 				System.out.println("-----------------------");
 			}
 		}
@@ -121,27 +142,23 @@ public class VideoController {
 		}
 		else {
 			for (Video video : userVideos) {
+				System.out.println("-----------------------");
 				System.out.println("Başlık: " + video.getTitle());
 				System.out.println("İçerik: " + video.getDescription());
-				
 				System.out.println("-----------------------");
 			}
 		}
-		
 	}
-	
-	private void kullanicilariListele() {
-		List<User> users = new UserController().getAllUsers(); // Bu metodu UserController'dan implement edin
-		
-		if (users.isEmpty()) {
-			System.out.println("Hiç kullanıcı bulunmuyor.");
+	public void SelectVideo() {
+		List<Video> videos = videoService.viewAllVideos();
+		if (videos.isEmpty()) {
+			System.out.println("Listelenecek video bulunamadı.");
+			return;
 		}
-		else {
-			System.out.println("Kullanıcı Listesi:");
-			for (User user : users) {
-				System.out.println("Username: " + user.getUsername());
-			}
-		}
-		
+		Scanner scanner = new Scanner(System.in);
+		System.out.print("İzlemek istediğiğniz videonun başlığını giriniz: ");
+		String selectedVideoTitle = scanner.nextLine();
+		videoRepository.incrementViewCount(selectedVideoTitle);
 	}
+
 }
