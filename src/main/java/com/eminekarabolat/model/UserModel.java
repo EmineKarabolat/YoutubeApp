@@ -8,11 +8,6 @@ import com.eminekarabolat.entity.User;
 
 public class UserModel {
 	
-	public CommentController commentController = new CommentController();
-	public UserController userController = new UserController();
-	public LikeController likeController = new LikeController();
-	public VideoController videoController =new VideoController();
-	
 	private Long id;
 	private String name;
 	private String surname;
